@@ -70,22 +70,20 @@ module.exports = (sequelize, DataTypes) => {
     branch_name: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      unique: {
+        arg: true,
+        msg: 'This branch is already taken.'
+
+      },
       validate: {
         notEmpty: { msg: "Branch name is required." },
         notNull: { msg: "Branch name is required." },
-        async isUnique(value) {
-          const branch_name = await Branch.findOne({
-            where: { branch_name: value }
-          });
-          if (branch_name) {
-            throw new Error('Branch name already exists');
-          }
-        },
       },
     },
     contact_no: {
         type: DataTypes.STRING(11),
         allowNull: false,
+        unique: true,
         validate: {
           notEmpty: { msg: "Contact no. is required." },
           notNull: { msg: "Contact no. is required." },
@@ -94,31 +92,25 @@ module.exports = (sequelize, DataTypes) => {
             args: [10,11],
             msg: "Must be 10-11 character long." 
           },
-          async isUnique(value) {
-            const contact_no = await Branch.findOne({
-              where: { contact_no: value }
-            });
-            if (contact_no) {
-              throw new Error('Contact no. already exists');
-            }
-          },
         },
     },
     email: {
       type: DataTypes.STRING(50),
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: { msg: "Email address is required." },
         notNull: { msg: "Email address is required." },
         isEmail: { msg: 'Invalid email address.'},
-        async isUnique(value) {
-          const email = await Branch.findOne({
-            where: { email: value }
-          });
-          if (email) {
-            throw new Error('Email address already exists');
-          }
-        },
+
+        // async isUnique(value) {
+        //   const email = await Branch.findOne({
+        //     where: { email: value }
+        //   });
+        //   if (email) {
+        //     throw new Error('Email address already exists');
+        //   }
+        // },
       },
     },
     unit_or_floor_no: {
